@@ -1,12 +1,14 @@
 <template lang="pug">
     div
-        router-view
+        sidebar
+        upnav
 </template>
 
 <script>
-    import layout from '@/components/Layout/Master.vue';
+    import sidebar from '@/components/Layout/Sidebar.vue'
+    import upnav from '@/components/Layout/UpNav.vue'
     export default {
-        components: { layout },
+        components: { sidebar, upnav },
         data () {
             return {}
         }
