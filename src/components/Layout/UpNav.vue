@@ -19,8 +19,15 @@
                         a(href="sass.html")
                             i(class="material-icons") assignment
                     li
-                        a(href="sass.html") Sign out     
-        <pre> {{ $data || json }} </pre>
+                        a(href="sass.html") Sign out 
+        nav(style="background-color:#64b5f6")
+            div(class="nav-wrapper")
+                div(class="col s12")
+                    a(href="#!" class="breadcrumb") First
+                    a(href="#!" class="breadcrumb") segundo
+                    a(href="#!" class="breadcrumb") tercero  
+ 
+
 </template>
 <script>
     export default {
