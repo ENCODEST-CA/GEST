@@ -14,8 +14,12 @@
                         input(id="icon_prefix" type="password" class="validate") 
                         label(for="icon_prefix") Contraseña
                     button(class="btn waves-effect waves-light" type="submit" name="action") Iniciar Sesión
-                        i(class="material-icons right") send
-                h5 ¿Olvidaste tu contraseña?
+                        i(class="material-icons right") lock_open
+                div(class="login-footer")
+                    a(href="#" class="recovery-password") Recuperar contraseña
+                    router-link(to="/sign-up")
+                        a(href="#" class="sign-up") Registrarse
+                router-view
 </template>
 
 <script>
@@ -76,9 +80,12 @@
                         margin-top: 20px
                         width: 100%
                         background: #2979ff
-                h5
+                
+                .login-footer
+                    display: grid
+                    padding-top: 20px
+                    grid-template-columns: 160px 80px
                     grid-row: 5 / 5
                     text-align: center
-                    font-size: 1em
-    
+                    justify-content: space-around
 </style>
