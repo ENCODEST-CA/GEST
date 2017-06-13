@@ -1,27 +1,28 @@
 <template lang="pug">
-    div(class="container")
-        div(class="login-box")
-            h2 GEST
-            h4 Crea tu cuenta
-            form(action="#" method="POST" autocomplete="off")
-                div(class="login-form")
-                    div(class="input-field")
-                        i(class="material-icons prefix") account_circle
-                        input(id="icon_prefix" type="text" class="validate") 
-                        label(for="icon_prefix") Nombre
-                    div(class="input-field")
-                        i(class="material-icons prefix") email
-                        input(id="icon_prefix" type="email" class="validate") 
-                        label(for="icon_prefix") Correo Electrónico
-                    div(class="input-field")
-                        i(class="material-icons prefix") vpn_key
-                        input(id="icon_prefix" type="password" class="validate") 
-                        label(for="icon_prefix") Contraseña
-                    button(class="btn waves-effect waves-light" type="submit" name="action") Comienza en GEST
-                        i(class="material-icons right") done
-                div(class="login-footer")
-                    router-link(to="/login")
-                        a(class="login") Ya tengo cuenta
+    div(class="container-full")
+        div(class="container")
+            div(class="login-box")
+                h2 GEST
+                h4 Crea tu cuenta
+                form(action="#" method="POST" autocomplete="off")
+                    div(class="login-form")
+                        div(class="input-field")
+                            i(class="material-icons prefix") account_circle
+                            input(id="icon_prefix" type="text" class="validate") 
+                            label(for="icon_prefix") Nombre
+                        div(class="input-field")
+                            i(class="material-icons prefix") email
+                            input(id="icon_prefix" type="email" class="validate") 
+                            label(for="icon_prefix") Correo Electrónico
+                        div(class="input-field")
+                            i(class="material-icons prefix") vpn_key
+                            input(id="icon_prefix" type="password" class="validate") 
+                            label(for="icon_prefix") Contraseña
+                        button(class="btn waves-effect waves-light" type="submit" name="action") Comienza en GEST
+                            i(class="material-icons right") done
+                    div(class="login-footer")
+                        router-link(to="/login")
+                            a(class="login") Ya tengo cuenta
 </template>
 
 <script>
@@ -29,8 +30,8 @@
 </script>
 
 <style lang="sass" scoped>
-    body
-        background: #1e88e5
+    .container-full
+        background-color: #1e88e5
     
         .container
             display: grid

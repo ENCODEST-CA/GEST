@@ -1,35 +1,36 @@
 <template lang="pug">
-    div(class="container")
-        div(class="login-box")
-            h2 GEST
-            h4 Ingresa con tu cuenta
-            form(action="#" method="POST" autocomplete="off")
-                div(class="login-form")
-                    div(class="input-field")
-                        i(class="material-icons prefix") email
-                        input(id="icon_prefix" type="email" class="validate") 
-                        label(for="icon_prefix") Correo Electrónico
-                    div(class="input-field")
-                        i(class="material-icons prefix") vpn_key
-                        input(id="icon_prefix" type="password" class="validate") 
-                        label(for="icon_prefix") Contraseña
-                    button(class="btn waves-effect waves-light" type="submit" name="action") Iniciar Sesión
-                        i(class="material-icons right") lock_open
-                div(class="login-footer")
-                    a(href="#" class="recovery-password") Recuperar contraseña
-                    router-link(to="/sign-up")
-                        a(href="#" class="sign-up") Registrarse
-                router-view
+    div(class="container-full")
+        div(class="container")
+            div(class="login-box")
+                h2 GEST
+                h4 Ingresa con tu cuenta
+                form(action="#" method="POST" autocomplete="off")
+                    div(class="login-form")
+                        div(class="input-field")
+                            i(class="material-icons prefix") email
+                            input(id="icon_prefix" type="email" class="validate") 
+                            label(for="icon_prefix") Correo Electrónico
+                        div(class="input-field")
+                            i(class="material-icons prefix") vpn_key
+                            input(id="icon_prefix" type="password" class="validate") 
+                            label(for="icon_prefix") Contraseña
+                        button(class="btn waves-effect waves-light" type="submit" name="action") Iniciar Sesión
+                            i(class="material-icons right") lock_open
+                    div(class="login-footer")
+                        a(href="#" class="recovery-password") Recuperar contraseña
+                        router-link(to="/sign-up")
+                            a(href="#" class="sign-up") Registrarse
+                    router-view
 </template>
 
 <script>
     export default {}
 </script>
 
-<style lang="sass">
-    body
-        background: #1e88e5
-    
+<style lang="sass" scoped>
+    .container-full
+        background-color: #1e88e5
+
         .container
             display: grid
             justify-items: center

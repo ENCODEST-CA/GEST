@@ -9,7 +9,7 @@
                 a(href="#!name")
                     span(class="white-text name") Alejandro Uray
                 a(href="#!email")
-                    span(class="white-text email") jdandturk@gmail.com
+                    span(class="white-text email") yohanysturiz@gmail.com
         li
             div(class="collapsible-header waves-effect waves-blue")
                 i(class="material-icons") assignment

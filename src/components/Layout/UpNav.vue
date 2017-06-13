@@ -7,9 +7,8 @@
                 ul(class="right hide-on-med-and-down")
                     li
                         router-link(to="/login")
-                            a
-                                | Alejandro Uray
-                                i(class="material-icons right") person
+                            | Alejandro Uray
+                            i(class="material-icons right") person
                     li
                         a(href="sass.html")
                             i(class="material-icons") notifications
@@ -19,6 +18,8 @@
                     li
                         a(href="sass.html")
                             i(class="material-icons") assignment
+                    li
+                        a(href="sass.html") Sign out     
         <pre> {{ $data || json }} </pre>
 </template>
 <script>

@@ -18,7 +18,7 @@
     .navbar
         padding-left: 300px
     nav
-        background: #1a237e
+        background-color: #1a237e
     @media only screen and (max-width : 992px)
         padding-left: 0
 </style>
