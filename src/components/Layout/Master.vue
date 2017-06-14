@@ -2,13 +2,16 @@
     div
         sidebar
         upnav
+        carousel
+
 </template>
 
 <script>
     import sidebar from '@/components/Layout/Sidebar.vue'
     import upnav from '@/components/Layout/UpNav.vue'
+    import carousel from '@/components/Layout/Carousel.vue'
     export default {
-        components: { sidebar, upnav },
+        components: { sidebar, upnav, carousel },
         data () {
             return {}
         }

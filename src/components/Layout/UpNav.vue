@@ -19,13 +19,10 @@
                         a(href="sass.html")
                             i(class="material-icons") assignment
                     li
-                        a(href="sass.html") Sign out 
-        nav(style="background-color:#64b5f6")
-            div(class="nav-wrapper")
-                div(class="col s12")
-                    a(href="#!" class="breadcrumb") First
-                    a(href="#!" class="breadcrumb") segundo
-                    a(href="#!" class="breadcrumb") tercero  
+                        a(href="sass.html") Sign out
+        nav(class="prueba")                                  
+            a(href="#!" class="breadcrumb") Login
+            a(href="#!" class="breadcrumb") Home
  
 
 </template>
@@ -49,4 +46,21 @@
 </script>
 
 <style lang="sass" scoped>
+    .prueba
+        border: 15px solid #bdbdbd
+        background: white
+        display: flex
+        a
+            align-self: center
+            border-radius: 100px
+            font-size: 14
+            padding: 0.5em .5em
+
+    .breadcrumb 
+        color: black 
+        
+    .breadcrumb:before
+            color: black
+
+
 </style>
