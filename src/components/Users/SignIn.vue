@@ -34,11 +34,16 @@
                 let email = $('#txtEmail').val()
                 let password = $('#txtPassword').val()
                 
-                // REGISTRAMOS EL USUARIO //
+                // AUTENTICAMOS EL USUARIO //
                 let promise = auth.signInWithEmailAndPassword(email, password)
-                promise.catch(e => console.log(e.message))
-                Materialize.toast('Inicio de Sesión con el usuario: ' + email, 4000)
-                this.$router.push({ name: 'dashboard' })
+                promise.catch((error) => {
+                    Materialize.toast('¡Usuario o contraseña incorrectos!', 4000)
+                })
+                promise.then( () => {
+                    const user = auth.currentUser
+                    Materialize.toast(`Inicio de Sesión con el usuario: ${user.email}`, 4000)
+                    this.$router.push({ name: 'dashboard' })
+                })
             }
         }
     }

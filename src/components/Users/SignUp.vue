@@ -3,49 +3,119 @@
         div(class="login-box")
             h2 GEST
             h4 Crea tu cuenta
-            form(action="#" method="POST" autocomplete="off")
+            form(id="formLogin" action="#" method="POST")
                 div(class="login-form")
                     div(class="input-field")
                         i(class="material-icons prefix") account_circle
-                        input(id="txtName" type="text" class="validate" required) 
+                        input(id="txtName" type="text" class="validate") 
                         label(for="txtName") Nombre
+                    
                     div(class="input-field")
                         i(class="material-icons prefix") email
-                        input(id="txtEmail" type="email" class="validate" required) 
+                        input(id="txtEmail" name="email" type="email" v-model="email" v-validate="'required|email'" :class="{'input': true, 'invalid': errors.has('email') }")
                         label(for="txtEmail") Correo Electrónico
+                        span(v-show="errors.has('email')" class="help is-danger") {{ errors.first('email') }}
+                    
                     div(class="input-field")
                         i(class="material-icons prefix") vpn_key
-                        input(id="txtPassword" type="password" class="validate") 
+                        input(id="txtPassword" name="password" type="password" v-model="password" v-validate="'required|password'" :class="{'input': true, 'invalid': errors.has('password') }") 
                         label(for="txtPassword") Contraseña
-                    button(id="btnSignUp" type="submit" class="btn waves-effect waves-light" @click.prevent="signUp") Comienza en GEST
+                    
+                    button(id="btnSignUp" type="submit" class="btn waves-effect waves-light" @click.prevent="validateForm") Comienza en GEST
                         i(class="material-icons right") done
+                
                 div(class="login-footer")
                     router-link(to="/login")
                         a(class="login") Ya tengo cuenta
+                <pre> {{ $data || json }} </pre>        
 </template>
 
 <script>
     import {auth} from './firebase'
+    import Vue from 'vue'
+    import VeeValidate from 'vee-validate'
+    import { Validator } from 'vee-validate';
+    const dictionary = {
+        en: {
+            custom: {
+                email: {
+                    email: () => 'El email ingresado no es válido',
+                    required: () => 'Debe ingresar el email'
+                },
+                password: {
+                    password: () => 'La contraseña no es válida',
+                    required: () => 'Debe ingresar una contraseña'
+                },                
+            },
+        }
+    };
+
+    Validator.updateDictionary(dictionary);
+    const validator = new Validator({ first_name: 'alpha' });
+    validator.setLocale('en');
+    Vue.use(VeeValidate)
     export default {
-        mounted() {
+        data () {
+            return {
+                email: '',
+                password: ''
+            }
+        },
+        mounted () {
             $('.tooltipped').tooltip({delay: 50})
         },
         methods: {
             signUp() {
-                // OBTENEMOS LOS VALORES DEL FORMULARIO //
+                // OBTENER LOS VALORES DEL FORMULARIO //
                 let email = $('#txtEmail').val()
                 let password = $('#txtPassword').val()
                 
-                // REGISTRAMOS EL USUARIO //
+                // REGISTRAR EL USUARIO //
                 let promise = auth.createUserWithEmailAndPassword(email, password)
-                promise.catch(function(error) {
-                    let errorMessage = error.message;
-                    Materialize.toast(errorMessage, 4000)
-                    return
+                promise.catch((error) => {
+                    // CAPTURAR LOS ERRORES
+                    switch (error.code) {
+                        case "auth/email-already-in-use":
+                            Materialize.toast('El email ingresado ya se encuentra en uso', 2000)
+                            break
+                        case "auth/invalid-email":
+                            Materialize.toast('El email ingresado no es válido', 2000)
+                            break
+                    }
                 })
-                Materialize.toast('Bienvenido a GEST ' + email, 4000)
-                this.$router.push({ name: 'dashboard' })
+                promise.then( () => {
+                    const user = auth.currentUser
+                    Materialize.toast(`Bienvenido a GEST: ${user.email}`, 4000)
+                    this.$router.push({ name: 'dashboard' })
+                })
+            },
+            validateForm() {
+                this.$validator.validateAll().then(() => {
+                    alert('From Submitted!');
+                }).catch(() => {
+                    alert('Correct them errors!');
+                });
             }
+            //     let email = this.form.elements.email
+            //     let password = this.form.elements.password
+                
+            //     if (email) {
+            //         this.form.validated = !this.form.validated
+            //     }
+            //     for (let i in form) {
+            //         console.log(form)
+            //     }
+                // for (let i in form) {
+                //     console.log(form)
+                // }
+                // const form = document.getElementById('formLogin')
+                // for (let i = 0; i < form.elements.length - 1; i++) {
+                //     let name = form.elements[i].name
+                //     let value = form.elements[i].value.length
+                //     if (value == 0) {
+                //         Materialize.toast(`El campo de ${name} es obligatorio`, 4000)
+                //         return
+                //     }
         }
     }
 </script>
@@ -89,14 +159,14 @@
                     padding: 0 15px
                     grid-row: 3 / 4
 
-                    input, input:focus:not([readonly])
-                        border-bottom: 1px solid #000
-                        box-shadow: 0 1px 0 0 #000
-                        &.valid, &.invalid
+                    input
                         border-bottom: 1px solid #000
                         box-shadow: 0 1px 0 0 #000
                         + label
                             color: #0d47a1
+                        .invalid
+                            border-bottom: 1px solid red
+                            box-shadow: 0 1px 0 0 red
                     .prefix.active
                         color: #0d47a1
 
