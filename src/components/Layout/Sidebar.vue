@@ -23,8 +23,9 @@
                 div(class="collapsible-body")
                     div(class="collapsible-options")
                         li
-                            i(class="material-icons") add
-                            | Nueva Tarea
+                            router-link(to="/NewTasts")
+                                i(class="material-icons") add
+                                | Agregar Tarea
                         li
                             i(class="material-icons") dvr
                             | Mis Tareas

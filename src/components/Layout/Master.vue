@@ -2,7 +2,8 @@
     div
         sidebar
         upnav
-        carousel
+        //carousel
+        router-view
 
 </template>
 
