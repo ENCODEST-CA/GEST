@@ -1,60 +1,46 @@
 <template lang="pug">
-    ul(id="slide-out" class="side-nav fixed")
-        li
-            div(class="userView")
-                div(class="background")
-                    img(src="static/img/header-test.jpg")
-                a(href="#!user")
-                    img(class="circle" src="static/img/avatar-test.jpg")
-                a(href="#!name")
-                    span(class="white-text name") Alejandro Uray
-                a(href="#!email")
-                    span(class="white-text email") jdandturk@gmail.com
-        li
-            div(class="collapsible-header waves-effect waves-blue")
-                i(class="material-icons") assignment
-                | Resumen
-        ul(class="collapsible" data-collapsible="accordion")
-            li
-                div(class="collapsible-header waves-effect waves-blue")
-                    i(class="material-icons") assignment
-                    | Tareas
-                    i(class="material-icons icon-right") keyboard_arrow_down
-                div(class="collapsible-body")
-                    div(class="collapsible-options")
-                        li
-                            i(class="material-icons") add
-                            | Nueva Tarea
-                        li
-                            i(class="material-icons") dvr
-                            | Mis Tareas
-            li
-                div(class="collapsible-header waves-effect waves-blue")
-                    i(class="material-icons") assignment
-                    | Estadísticas
-                    i(class="material-icons icon-right") keyboard_arrow_down
-                div(class="collapsible-body")
-                    div(class="collapsible-options")
-                        li
-                            i(class="material-icons") add
-                            | Nueva Tarea
-                        li
-                            i(class="material-icons") dvr
-                            | Mis Tareas
-        li
-            div(class="collapsible-header waves-effect waves-blue")
-                i(class="material-icons") settings
-                | Configuración
+    v-navigation-drawer(persistent light :mini-variant.sync="mini" v-model="drawer")
+        v-list(class="pa-0")
+            v-list-item
+                v-list-tile(avatar tag="div")
+                    v-list-tile-avatar 
+                        img(src="static/img/logo.png" slot="activator")
+                    v-list-tile-content
+                        v-list-tile-title GEST ADMIN
+                    v-list-tile-action
+                        v-btn(icon @click.native.stop="mini = !mini")
+                            v-icon chevron_left
+            template(v-for="(item, i) in items" raised)
+                v-layout(row v-if="item.heading" align-center :key="i")
+                    v-flex(xs6)
+                        v-subheader(v-if="item.heading") {{ item.heading }}
+                    v-flex(xs6 class="text-xs-center")
+                        a(href="#!" class="body-2 black--text") EDIT
+                v-list-group(v-else-if="item.children" v-model="item.model" no-action)
+                    v-list-item(slot="item")
+                        v-list-tile
+                            v-list-tile-action
+                                v-icon {{ item.icon }}
+                            v-list-tile-content
+                                v-list-tile-title(class="text-normal") {{ item.text }}
+                            v-list-tile-action
+                                v-icon {{ item.model ? item['icon-up'] : item['icon-down'] }}
+                    v-list-item(v-for="(child, i) in item.children" :key="i")
+                        v-list-tile(ripple)
+                            v-list-tile-action(v-if="child.icon")
+                                v-icon {{ child.icon }}
+                            v-list-tile-content
+                                v-list-tile-title(class="text-normal") {{ child.text }}
+                v-list-item(v-else)
+                    v-list-tile(ripple)
+                        v-list-tile-action
+                            v-icon {{ item.icon }}
+                        v-list-tile-content
+                            v-list-tile-title(class="text-normal") {{ item.text }}
 </template>
 
 <script>
     export default {
-        mounted() {
-            $(".button-collapse").sideNav();
-            $('.collapsible').collapsible();
-        },
-        methods: {
-        }
     }
 </script>
 
