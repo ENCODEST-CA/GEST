@@ -1,23 +1,18 @@
 <template lang="pug">
     v-app
-        v-navigation-drawer(persistent light :mini-variant.sync="mini" v-model="drawer")
+        v-navigation-drawer(persistent light :mini-variant.sync="sidebar_slim" v-model="sidebar")
             v-list(class="pa-0")
                 v-list-item
                     v-list-tile(avatar tag="div")
                         v-list-tile-avatar 
-                            img(src="static/img/logo.png" slot="activator")
+                            img(src="static/img/logo.png")
                         v-list-tile-content
                             v-list-tile-title GEST ADMIN
                         v-list-tile-action
-                            v-btn(icon @click.native.stop="mini = !mini")
+                            v-btn(icon @click.native.stop="sidebar_slim = !sidebar_slim")
                                 v-icon chevron_left
-                template(v-for="(item, i) in items" raised)
-                    v-layout(row v-if="item.heading" align-center :key="i")
-                        v-flex(xs6)
-                            v-subheader(v-if="item.heading") {{ item.heading }}
-                        v-flex(xs6 class="text-xs-center")
-                            a(href="#!" class="body-2 black--text") EDIT
-                    v-list-group(v-else-if="item.children" v-model="item.model" no-action)
+                template(v-for="(item, i) in sidebar_items" raised)
+                    v-list-group(v-if="item.children" v-model="item.model" no-action)
                         v-list-item(slot="item")
                             v-list-tile
                                 v-list-tile-action
@@ -39,7 +34,7 @@
                             v-list-tile-content
                                 v-list-tile-title(class="text-normal") {{ item.text }}
         v-toolbar(fixed class="blue" light)
-            v-toolbar-side-icon(light @click.native.stop="drawer = !drawer")
+            v-toolbar-side-icon(light @click.native.stop="sidebar = !sidebar")
                 v-toolbar-title Toolbar
             v-toolbar-title(class="hidden-sm-and-down") DASHBOARD
             v-toolbar-items
@@ -47,10 +42,10 @@
                     v-list-tile-avatar(class="padding-normal")
                         v-menu(offset-y)
                             v-list
-                                v-list-item(v-for="item in items" :key="item")
+                                v-list-item(v-for="item in sidebar_items" :key="item")
                                     v-list-tile
                                         v-list-tile-title {{ item.text }}
-                            img(src="https://randomuser.me/api/portraits/men/85.jpg" primary light slot="activator" class="deep-orange")
+                            img(src="https://randomuser.me/api/portraits/men/85.jpg" primary light slot="activator" class="deep-blue")
             v-btn(icon light)
                 v-icon grade
             v-btn(icon light)
@@ -69,8 +64,9 @@ Vue.use(Vuetify)
   export default {
     data () {
       return {
-        drawer: true,
-        items: [
+        sidebar: true,
+        sidebar_slim: true,
+        sidebar_items: [
             { icon: 'domain', text: 'SERVICIOS ENCODEST' },
             { icon: 'grid_on', text: 'Gerencia de Sistemas' },
             { icon: 'group', text: 'Equipos de trabajo' },
@@ -79,7 +75,7 @@ Vue.use(Vuetify)
                 'icon-up': 'keyboard_arrow_up',
                 'icon-down': 'keyboard_arrow_down',
                 text: 'Tareas',
-                model: true,
+                model: false,
                 children: [
                     { icon: 'add_box', text: 'Crear tarea' },
                     { icon: 'search', text: 'Mis tareas' },
@@ -87,15 +83,11 @@ Vue.use(Vuetify)
             },
             { icon: 'help', text: 'Ayuda' },
         ],
-        mini: false,
-        right: null
       }
     }
   }
 </script>
-<style lang="sass">
-    body
-        display: block
+<style lang="sass" scoped>
     #navigation-1 a
         text-decoration: none
     

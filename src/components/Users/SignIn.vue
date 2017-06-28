@@ -1,114 +1,173 @@
 <template lang="pug">
     div(class="container")
-        div(class="login-box")
-            h2 GEST
-            h4 Ingresa con tu cuenta
-            form(action="#" method="POST" autocomplete="off")
-                div(class="login-form")
-                    div(class="input-field")
-                        i(class="material-icons prefix") email
-                        input(id="txtEmail" type="email" class="validate") 
-                        label(for="txtEmail") Correo Electrónico
-                    div(class="input-field")
-                        i(class="material-icons prefix") vpn_key
-                        input(id="txtPassword" type="password" class="validate") 
-                        label(for="txtPassword") Contraseña
-                    button(id="btnSignIn" type="submit" class="btn waves-effect waves-light" @click.prevent="signIn") Iniciar Sesión
-                        i(class="material-icons right") lock_open
-                div(class="login-footer")
-                    a(href="#" class="recovery-password") Recuperar contraseña
-                    router-link(to="/sign-up")
-                        a(href="#" class="sign-up") Registrarse
-                router-view
+        v-card
+            form(@submit.prevent="signIn")
+                v-card-row(class="blue darken-4")
+                    v-card-title(class="center")
+                        span(class="white--text display-2") GEST ADMIN
+                        v-spacer
+                v-card-text(class="white-bg")
+                    v-text-field(
+                        v-model="form.email"
+                        single-line
+                        label="Dirección de correo electrónico"
+                        hint="Esta dirección de correo se utilizará para iniciar sesión en GEST"
+                        prepend-icon="email"
+                        type="email"
+                        required)
+                    v-text-field(
+                        v-model="form.password"
+                        single-line
+                        label="Contraseña"
+                        hint="La contraseña debe contener un mínimo de ocho (8) caracteres"
+                        prepend-icon="vpn_key"
+                        required
+                        maxlength="25"
+                        counter
+                        :append-icon="show_password ? 'visibility' : 'visibility_off'"
+                        :type="show_password ? 'text' : 'password'"
+                        :append-icon-cb="() => (show_password = !show_password)")
+                    div(class="action-secondary")
+                        router-link(to="/sign-up")
+                            v-btn(light info flat class="blue--text btn-action-secondary") Registrarse
+                                v-icon(right dark) person_add
+                v-divider(style="background: #eee")
+                v-card-row(actions class="white-bg action-primary")
+                    v-btn(
+                        light
+                        info
+                        :loading="loading_animation"
+                        @click.native="loader = 'loading_animation'"
+                        :disabled="loading_animation"
+                        type="submit") Iniciar Sesión
+                            span(slot="loader" class="custom-loader")
+                                v-icon(light) cached
+                    v-snackbar(:timeout="6000" :class="snackbar.context" top right v-model="snackbar.show") 
+                        v-icon(light class="snackbar-icon") {{ snackbar.icon }}
+                        | {{ snackbar.message }}
+        <!--pre {{ $data }} -->
 </template>
 
 <script>
     import {auth} from './firebase'
     export default {
-        mounted() {
-            $('.tooltipped').tooltip({delay: 50})
+        data () {
+            return {
+                form: {
+                    email: null,
+                    password: null,
+                    password_confirm: null
+                },
+                show_password: false,
+                show_password_confirm: false,
+                loading_animation: false,
+                loader: null,
+                snackbar: {
+                    show: false,
+                    context: null,
+                    message: null,
+                    icon: null,
+                },
+            }
         },
         methods: {
             signIn() {
-                // OBTENEMOS LOS VALORES DEL FORMULARIO //
-                let email = $('#txtEmail').val()
-                let password = $('#txtPassword').val()
+                this.loading_animation = true
+
+                const email = this.form.email
+                const password = this.form.password
                 
-                // AUTENTICAMOS EL USUARIO //
-                let promise = auth.signInWithEmailAndPassword(email, password)
-                promise.catch((error) => {
-                    Materialize.toast('¡Usuario o contraseña incorrectos!', 4000)
+                let authenticate_user = auth.signInWithEmailAndPassword(email, password)
+
+                authenticate_user.catch((error) => {
+                    error.code = 'auth/network-request-failed' ? this.snackbarShow('warning') : this.snackbarShow('error')
                 })
-                promise.then( () => {
+
+                authenticate_user.then(() => {
                     const user = auth.currentUser
-                    Materialize.toast(`Inicio de Sesión con el usuario: ${user.email}`, 4000)
-                    this.$router.push({ name: 'dashboard' })
+                    this.snackbarShow('success')
+                    setTimeout(this.$router.push({ name: 'dashboard' }),2000)
                 })
+            },
+            snackbarShow(context) {
+                    this.snackbar.show = true
+                    this.loader = null
+                    this.loading_animation = false
+                    this.snackbar.context = context
+                    switch (context) {
+                        case 'error':
+                            this.snackbar.icon = 'cancel'
+                            return this.snackbar.message = '¡Usuario o contraseña incorrectos!'
+                            break
+                        case 'success':
+                            this.snackbar.icon = 'check_circle'
+                            return this.snackbar.message = 'Usuario logueado satisfactoriamente'
+                            break
+                        case 'warning':
+                            this.snackbar.icon = 'info'
+                            this.snackbar.message = 'Hemos detectado problemas en su conexión de Internet. Intente de nuevo'
+                            break
+                    }
             }
         }
     }
 </script>
 
-<style lang="sass">
-    body
-        background: #1e88e5
+<style lang="sass" scoped>
+    .container
+        display: grid
+        align-items: center
+        justify-content: center
+        max-width: 100%
+        height: 100vh
+        background: url('/static/img/background.jpg') no-repeat fixed
+        background-size: 100% 100%
+
+    .card
+        display: grid
+        width: 450px
     
-        .container
-            display: grid
-            justify-items: center
-            width: 100%
-            height: 100vh
-            grid-template-columns: 1fr 1fr 1fr 1fr
-            grid-template-rows: 10em 10em 10em 1em
-            
-            .login-box
-                display: grid
-                grid-template-rows: 5em 4em 10em 5em
-                grid-column: 2 / 4
-                grid-row: 2 / 4
-                border: 1px solid
-                width: 70%
-                height: 140%
-                background: white
-                
-                h2
-                    grid-row: 1 / 2
-                    /*border: 1px solid*/
-                    text-align: center
-                    background: #0d47a1
-                    margin: 0
-                    color: white
-                
-                h4
-                    grid-row: 2 / 3
-                    text-align: center
-                    font-size: 1.5em
-                
-                .login-form
-                    padding: 0 15px
-                    grid-row: 3 / 4
+    .white-bg
+        background: white
 
-                    input, input:focus:not([readonly])
-                        border-bottom: 1px solid #000
-                        box-shadow: 0 1px 0 0 #000
-                        &.valid, &.invalid
-                        border-bottom: 1px solid #000
-                        box-shadow: 0 1px 0 0 #000
-                        + label
-                            color: #0d47a1
-                    .prefix.active
-                        color: #0d47a1
+    .input-group
+        max-width: 450px
 
-                    button
-                        margin-top: 20px
-                        width: 100%
-                        background: #2979ff
-                
-                .login-footer
-                    display: grid
-                    padding-top: 20px
-                    grid-template-columns: 160px 80px
-                    grid-row: 5 / 5
-                    text-align: center
-                    justify-content: space-around
+    .action-secondary
+        display: grid
+        justify-content: center
+        flex-wrap: nowrap
+
+    .divider
+        background: #eee
+
+    .action-primary
+        display: grid
+        grid-template-columns: 1fr
+    
+    .custom-loader
+        animation: loader 1s infinite
+        display: flex
+
+    @keyframes loader
+        from
+            transform: rotate(0)
+        to
+            transform: rotate(360deg)
+</style>
+
+<style lang="sass">
+    .center
+        display: grid
+        align-items: center
+        justify-content: center
+
+    a
+        text-decoration: none
+
+    .input-group__details
+        padding-right: 40px
+
+    .snackbar-icon
+        padding-right: 5px
 </style>

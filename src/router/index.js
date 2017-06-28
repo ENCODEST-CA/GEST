@@ -13,8 +13,8 @@ export default new Router({
         component: Layout,
         meta: { requiresAuth: true }
       },
-    {path: '/login', component: SignIn},
     {path: '/sign-up', component: SignUp},
-    {path: '*', component: Layout, redirect: '/login'},
+    {path: '/sign-in', component: SignIn},
+    {path: '*', component: Layout, redirect: '/sign-up'},
   ]
 })
