@@ -8,6 +8,13 @@
                         v-spacer
                 v-card-text(class="white-bg")
                     v-text-field(
+                        v-model="form.name"
+                        single-line
+                        label="Nombre"
+                        hint="Debe escribir su nombre real"
+                        prepend-icon="account_box"
+                        required)
+                    v-text-field(
                         v-model="form.email"
                         single-line
                         label="Dirección de correo electrónico"
@@ -66,6 +73,7 @@
         data () {
             return {
                 form: {
+                    name: null,
                     email: null,
                     password: null,
                     password_confirm: null
@@ -86,11 +94,13 @@
             signUp() {
                 this.loading_animation = true
 
+                const name = this.form.name
                 const email = this.form.email
                 const password = this.form.password
                 const create_user = auth.createUserWithEmailAndPassword(email, password)
 
                 create_user.catch((error) => {
+                    console.log(error)
                     error.code = 'auth/email-already-in-use' ? this.snackbarShow('error') : this.snackbarShow('warning')
                 })
 
@@ -98,6 +108,18 @@
                     let user = auth.currentUser
                     this.snackbarShow('success')
                     this.$router.push({ name: 'dashboard' })
+
+                    user.updateProfile({
+                        displayName: name,
+                        photoURL: 'static/img/avatar.png'
+                    }).then(() => { 
+                        console.log('Sin errores') 
+                        this.$store.state.user.email = email
+                        this.$store.state.user.name = name
+                        console.log(this.$store.state.user)
+                    },(error) => {
+                        console.log('Ha ocurrido un error')
+                    })
                 })
             },
             snackbarShow(context) {

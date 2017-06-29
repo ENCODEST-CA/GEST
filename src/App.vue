@@ -13,8 +13,6 @@
     }
 </script>
 <style lang="sass">
-    html
-        overflow-y: hidden
     .navbar
         padding-left: 300px
     nav

@@ -1,5 +1,5 @@
 <template lang="pug">
-    v-app
+    v-app(class="prueba")
         v-navigation-drawer(persistent light :mini-variant.sync="sidebar_slim" v-model="sidebar")
             v-list(class="pa-0")
                 v-list-item
@@ -36,16 +36,16 @@
         v-toolbar(fixed class="blue" light)
             v-toolbar-side-icon(light @click.native.stop="sidebar = !sidebar")
                 v-toolbar-title Toolbar
-            v-toolbar-title(class="hidden-sm-and-down") DASHBOARD
+            v-toolbar-title(class="hidden-sm-and-down") {{ email }}
             v-toolbar-items
-                v-toolbar-item Alejandro Uray
+                v-toolbar-item {{ name }}
                     v-list-tile-avatar(class="padding-normal")
                         v-menu(offset-y)
                             v-list
                                 v-list-item(v-for="item in sidebar_items" :key="item")
                                     v-list-tile
                                         v-list-tile-title {{ item.text }}
-                            img(src="https://randomuser.me/api/portraits/men/85.jpg" primary light slot="activator" class="deep-blue")
+                            img(src="static/img/avatar.png" primary light slot="activator" class="deep-blue")
             v-btn(icon light)
                 v-icon grade
             v-btn(icon light)
@@ -54,14 +54,36 @@
                 v-icon notifications
             v-btn(icon light)
                 v-icon exit_to_app
+        main
+            v-container(fluid)
+                pre {{ $data }}
 </template>
 
 <script>
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import {mapState} from 'vuex'
+import {auth} from '../components/Users/firebase'
  
 Vue.use(Vuetify)
   export default {
+    mounted() {
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                authdata = user
+            }
+            else {
+                authdata = null
+            }
+        })
+        //console.log(authdata)
+        // let user = auth
+        // console.log(user)
+        // if (user) {
+        //     this.name = user.currentUser.uid
+        //     this.email = 'hola 1'
+        // }
+    },
     data () {
       return {
         sidebar: true,
@@ -83,8 +105,10 @@ Vue.use(Vuetify)
             },
             { icon: 'help', text: 'Ayuda' },
         ],
+        name: null,
+        email: null,
       }
-    }
+    },
   }
 </script>
 <style lang="sass" scoped>
